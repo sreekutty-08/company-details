@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Data Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+
+    <div class="max-w-5xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-3xl font-bold text-blue-600">Company Data Form</h2>
+
+        <form id="dataForm" class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="hidden" id="editIndex">
+            <input type="text" id="company_name" placeholder="Company Name" class="border p-2 rounded">
+            <input type="email" id="company_email" placeholder="Company Email" class="border p-2 rounded">
+            <input type="text" id="contact_person" placeholder="Contact Person" class="border p-2 rounded">
+            <input type="text" id="country" placeholder="Country" class="border p-2 rounded">
+            <input type="text" id="company_phone" placeholder="Company Phone" class="border p-2 rounded">
+            <input type="text" id="address" placeholder="Address" class="border p-2 rounded">
+            <input type="text" id="company_website" placeholder="Company Website" class="border p-2 rounded">
+            <input type="email" id="support_email" placeholder="Support Email" class="border p-2 rounded">
+            <input type="text" id="user_name" placeholder="User Name" class="border p-2 rounded">
+
+            <select id="user_type" class="border p-2 rounded">
+                <option value="Client">Client</option>
+                <option value="Vendor">Vendor</option>
+            </select>
+
+            <select id="technical_status" class="border p-2 rounded">
+                <option value="Test Pass">Test Pass</option>
+                <option value="Test Initiated">Test Initiated</option>
+                <option value="Test Fail">Test Fail</option>
+                <option value="Pending">Pending</option>
+            </select>
+
+            <!-- Priority Selection -->
+            <select id="priority" class="border p-2 rounded">
+                <option value="High">High</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="Low">Low</option>
+            </select>
+
+            <!-- Multiple IP Inputs -->
+            <div class="col-span-2">
+                <label class="block text-gray-700 font-bold">Switch IPs:</label>
+                <div id="ipContainer">
+                    <input type="text" class="border p-2 rounded mb-2 ip-input" placeholder="Enter IP">
+                </div>
+                <button type="button" onclick="addIP()" class="bg-green-500 text-white px-3 py-1 rounded">
+                    + Add IP
+                </button>
+            </div>
+
+            <button type="submit" class="col-span-2 bg-blue-600 text-white p-2 rounded mt-2">
+                Save Data
+            </button>
+        </form>
+
+        <div class="mt-4">
+            <a href="table.html" class="text-blue-600 underline">View Records</a> |
+            <a href="export.html" class="text-green-600 underline">Export Data</a>
+        </div>
+    </div>
+
+    <script>
+        function addIP() {
+            let container = document.getElementById("ipContainer");
+            let input = document.createElement("input");
+            input.type = "text";
+            input.className = "border p-2 rounded mb-2 ip-input";
+            input.placeholder = "Enter IP";
+            container.appendChild(input);
+        }
+
+        document.getElementById("dataForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            let editIndex = document.getElementById("editIndex").value;
+
+            // Collect all IPs
+            let ipInputs = document.querySelectorAll(".ip-input");
+            let switch_ips = [];
+            ipInputs.forEach(input => {
+                if (input.value.trim() !== "") {
+                    switch_ips.push(input.value.trim());
+                }
+            });
+
+            let data = {
+                company_name: document.getElementById("company_name").value,
+                company_email: document.getElementById("company_email").value,
+                contact_person: document.getElementById("contact_person").value,
+                country: document.getElementById("country").value,
+                company_phone: document.getElementById("company_phone").value,
+                address: document.getElementById("address").value,
+                company_website: document.getElementById("company_website").value,
+                switch_ips: switch_ips,  // Store multiple IPs as an array
+                support_email: document.getElementById("support_email").value,
+                user_name: document.getElementById("user_name").value,
+                user_type: document.getElementById("user_type").value,
+                technical_status: document.getElementById("technical_status").value,
+                priority: document.getElementById("priority").value  // Save priority
+            };
+
+            let storedData = JSON.parse(localStorage.getItem("companyData")) || [];
+
+            if (editIndex !== "") {
+                storedData[editIndex] = data;
+                document.getElementById("editIndex").value = "";
+            } else {
+                storedData.push(data);
+            }
+
+            localStorage.setItem("companyData", JSON.stringify(storedData));
+            this.reset();
+            document.getElementById("ipContainer").innerHTML = '<input type="text" class="border p-2 rounded mb-2 ip-input" placeholder="Enter IP">';
+        });
+    </script>
+
+</body>
+</html>
