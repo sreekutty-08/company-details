@@ -3,154 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Company Records</title>
+    <title>Company Data Form</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 p-8">
 
-    <div class="max-w-screen-xl mx-auto bg-white p-6 rounded-lg shadow-lg">
-        <h2 class="text-3xl font-bold text-blue-600 mb-4">Company Records</h2>
+    <div class="max-w-5xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-3xl font-bold text-blue-600">Company Data Form</h2>
 
-        <!-- Action Buttons -->
-        <div class="flex justify-between items-center mb-4">
-            <div>
-                <a href="index.html" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add New Record</a>
-                <a href="export.html" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 ml-2">Export Data</a>
-            </div>
-            <div>
-                <select id="userTypeFilter" class="border p-2 rounded">
-                    <option value="">Filter by User Type</option>
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                    <option value="Junk">Junk</option>
-                </select>
+        <form id="dataForm" class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="text" id="company_name" placeholder="Company Name" class="border p-2 rounded">
+            <input type="email" id="company_email" placeholder="Company Email" class="border p-2 rounded">
+            <input type="text" id="contact_person" placeholder="Contact Person" class="border p-2 rounded">
+            <input type="text" id="country" placeholder="Country" class="border p-2 rounded">
+            <input type="text" id="company_phone" placeholder="Company Phone" class="border p-2 rounded">
+            <input type="text" id="address" placeholder="Address" class="border p-2 rounded">
+            <input type="text" id="company_website" placeholder="Company Website" class="border p-2 rounded">
+            <input type="email" id="support_email" placeholder="Support Email" class="border p-2 rounded">
+            <input type="text" id="user_name" placeholder="User Name" class="border p-2 rounded">
 
-                <select id="techStatusFilter" class="border p-2 rounded">
-                    <option value="">Filter by Technical Status</option>
-                    <option value="Test Pass">Test Pass</option>
-                    <option value="Test Initiated">Test Initiated</option>
-                    <option value="Test Fail">Test Fail</option>
-                    <option value="Pending">Pending</option>
-                </select>
+            <select id="user_type" class="border p-2 rounded">
+                <option value="Client">Client</option>
+                <option value="Vendor">Vendor</option>
+            </select>
 
-                <input type="text" id="searchIP" placeholder="Search by IP" class="border p-2 rounded w-60">
-            </div>
-        </div>
+            <select id="technical_status" class="border p-2 rounded">
+                <option value="Test Pass">Test Pass</option>
+                <option value="Test Initiated">Test Initiated</option>
+                <option value="Test Fail">Test Fail</option>
+                <option value="Pending">Pending</option>
+            </select>
 
-        <!-- Company Details Table -->
-        <div class="overflow-x-auto">
-            <table class="w-full bg-white border border-gray-200 rounded-lg">
-                <thead class="bg-blue-600 text-white">
-                    <tr>
-                        <th class="p-2 border">Company Name</th>
-                        <th class="p-2 border">Contact Person</th>
-                        <th class="p-2 border">Country</th>
-                        <th class="p-2 border">Phone</th>
-                        <th class="p-2 border">Website</th>
-                        <th class="p-2 border">Switch IP</th>
-                        <th class="p-2 border">User Type</th>
-                        <th class="p-2 border">Technical Status</th>
-                        <th class="p-2 border">Priority</th>
-                        <th class="p-2 border">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="dataTable"></tbody>
-            </table>
-        </div>
-    </div>
+            <select id="priority" class="border p-2 rounded">
+                <option value="High">High</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="Low">Low</option>
+            </select>
 
-    <!-- Popup Modal for View & Edit -->
-    <div id="viewModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-2/3 flex relative">
-            
-            <!-- Close Button (X) -->
-            <button onclick="closeViewModal()" class="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full hover:bg-red-600">✕</button>
-
-            <!-- Left Side: Company Details -->
-            <div class="w-2/3 pr-4 border-r">
-                <h2 class="text-xl font-bold text-blue-600 mb-4">Company Details</h2>
-                <div id="viewDetails" class="text-gray-700 space-y-2"></div>
-
-                <!-- Edit Section -->
-                <div class="mt-4">
-                    <h3 class="text-lg font-bold text-gray-800">Edit Details</h3>
-                    <form id="editForm">
-                        <input type="text" id="editCompanyName" placeholder="Company Name" class="w-full border p-2 rounded mb-2">
-                        <input type="text" id="editContactPerson" placeholder="Contact Person" class="w-full border p-2 rounded mb-2">
-                        <input type="text" id="editCountry" placeholder="Country" class="w-full border p-2 rounded mb-2">
-                        <input type="text" id="editPhone" placeholder="Phone" class="w-full border p-2 rounded mb-2">
-                        <input type="text" id="editWebsite" placeholder="Website" class="w-full border p-2 rounded mb-2">
-                        <button type="button" onclick="saveEdit()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Save Changes</button>
-                    </form>
+            <div class="col-span-2">
+                <label class="block text-gray-700 font-bold">Switch IPs:</label>
+                <div id="ipContainer">
+                    <input type="text" class="border p-2 rounded mb-2 ip-input" placeholder="Enter IP">
                 </div>
+                <button type="button" onclick="addIP()" class="bg-green-500 text-white px-3 py-1 rounded">
+                    + Add IP
+                </button>
             </div>
 
-            <!-- Right Side: Follow-Ups -->
-            <div class="w-1/3 pl-4">
-                <h3 class="text-lg font-bold text-gray-800">Follow-Ups</h3>
-                <ul id="followUpsList" class="list-disc ml-4 text-gray-700"></ul>
-                <textarea id="followUpInput" class="w-full border p-2 mt-2 rounded" placeholder="Add follow-up comment"></textarea>
-                <button onclick="addFollowUp()" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Follow-Up</button>
-            </div>
+            <button type="submit" class="col-span-2 bg-blue-600 text-white p-2 rounded mt-2">
+                Save Data
+            </button>
+        </form>
+
+        <div class="mt-4">
+            <a href="table.html" class="text-blue-600 underline">View Records</a> |
+            <a href="export.html" class="text-green-600 underline">Export Data</a>
         </div>
     </div>
 
     <script>
-        let editingIndex = null;
+        function addIP() {
+            let container = document.getElementById("ipContainer");
+            let input = document.createElement("input");
+            input.type = "text";
+            input.className = "border p-2 rounded mb-2 ip-input";
+            input.placeholder = "Enter IP";
+            container.appendChild(input);
+        }
 
-        function loadTableData() {
-            let tableBody = document.getElementById("dataTable");
-            tableBody.innerHTML = "";
-            let storedData = JSON.parse(localStorage.getItem("companyData")) || [];
+        document.getElementById("dataForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
 
-            storedData.forEach((data, index) => {
-                let rowColor = index % 2 === 0 ? "bg-gray-100" : "bg-white";
-                let row = `<tr class="border ${rowColor}">
-                    <td class="p-2 border">${data.company_name}</td>
-                    <td class="p-2 border">${data.contact_person}</td>
-                    <td class="p-2 border">${data.country}</td>
-                    <td class="p-2 border">${data.company_phone}</td>
-                    <td class="p-2 border">${data.company_website}</td>
-                    <td class="p-2 border">${data.switch_ips}</td>
-                    <td class="p-2 border">${data.user_type}</td>
-                    <td class="p-2 border">${data.technical_status}</td>
-                    <td class="p-2 border">${data.priority}</td>
-                    <td class="p-2 border text-center">
-                        <button onclick="viewRecord(${index})" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">View</button>
-                        <button onclick="deleteRecord(${index})" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Delete</button>
-                    </td>
-                </tr>`;
-                tableBody.innerHTML += row;
+            let ipInputs = document.querySelectorAll(".ip-input");
+            let switch_ips = [];
+            ipInputs.forEach(input => {
+                if (input.value.trim() !== "") {
+                    switch_ips.push(input.value.trim());
+                }
             });
-        }
 
-        function viewRecord(index) {
-            let storedData = JSON.parse(localStorage.getItem("companyData")) || [];
-            let details = storedData[index];
+            let data = {
+                company_name: document.getElementById("company_name").value,
+                company_email: document.getElementById("company_email").value,
+                contact_person: document.getElementById("contact_person").value,
+                country: document.getElementById("country").value,
+                company_phone: document.getElementById("company_phone").value,
+                address: document.getElementById("address").value,
+                company_website: document.getElementById("company_website").value,
+                switch_ips: switch_ips,
+                support_email: document.getElementById("support_email").value,
+                user_name: document.getElementById("user_name").value,
+                user_type: document.getElementById("user_type").value,
+                technical_status: document.getElementById("technical_status").value,
+                priority: document.getElementById("priority").value
+            };
 
-            document.getElementById("viewDetails").innerHTML = `
-                <strong>Company Name:</strong> ${details.company_name}<br>
-                <strong>Contact Person:</strong> ${details.contact_person}<br>
-                <strong>Country:</strong> ${details.country}<br>
-                <strong>Phone:</strong> ${details.company_phone}<br>
-            `;
+            let apiUrl = "https://script.google.com/macros/s/AKfycbzS8EDMaVTVj0kdZlqTfNA2LCHcTGt-CxhLwFVrjPfJezu8R8Aj9V5GPNLNhrmldNvXuA/exec"; // Your Google Apps Script URL
 
-            editingIndex = index;
-            document.getElementById("viewModal").classList.remove("hidden");
-        }
+            try {
+                let response = await fetch(apiUrl, {
+                    method: "POST",
+                    body: JSON.stringify(data),
+                    headers: { "Content-Type": "application/json" }
+                });
 
-        function deleteRecord(index) {
-            let storedData = JSON.parse(localStorage.getItem("companyData")) || [];
-            storedData.splice(index, 1);
-            localStorage.setItem("companyData", JSON.stringify(storedData));
-            loadTableData();
-        }
+                let result = await response.json();
+                console.log(result);
 
-        function closeViewModal() {
-            document.getElementById("viewModal").classList.add("hidden");
-        }
-
-        document.addEventListener("DOMContentLoaded", loadTableData);
+                if (result.status === "success") {
+                    alert("Data saved to Google Sheets!");
+                    this.reset();
+                    document.getElementById("ipContainer").innerHTML = '<input type="text" class="border p-2 rounded mb-2 ip-input" placeholder="Enter IP">';
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Failed to save data.");
+            }
+        });
     </script>
 
 </body>
